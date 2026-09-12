@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hemma Sapphire - Flat Price & Size Interactive Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Premium background elements for rich visual depth -->
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+    <div class="bg-shape bg-shape-3"></div>
+
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header">
+            <div class="logo">
+                <span class="logo-icon">💎</span>
+                <h1>Hemma Sapphire</h1>
+            </div>
+            <p class="subtitle">Residential Flat Interactive Sizing & Price Directory</p>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="app-main">
+            <!-- Left Panel: Filters & Selectors -->
+            <section class="control-panel">
+                <!-- Sizing Filters -->
+                <div class="card filter-card">
+                    <div class="card-header">
+                        <span class="icon">📐</span>
+                        <h2>Filter by Flat Size</h2>
+                    </div>
+                    
+                    <!-- Preset Sizing Tags -->
+                    <div class="filter-presets">
+                        <button class="preset-btn active" data-preset="all">All Sizes</button>
+                        <button class="preset-btn" data-preset="small">Compact (&lt; 350 sq.ft)</button>
+                        <button class="preset-btn" data-preset="medium">Mid-Size (350 - 450 sq.ft)</button>
+                        <button class="preset-btn" data-preset="large">Spacious (&gt; 450 sq.ft)</button>
+                    </div>
+
+                    <!-- Custom Sizing Inputs -->
+                    <div class="custom-range">
+                        <div class="range-group">
+                            <label for="min-size">Min Size (sq.ft)</label>
+                            <input type="number" id="min-size" placeholder="e.g. 300" min="0">
+                        </div>
+                        <div class="range-group">
+                            <label for="max-size">Max Size (sq.ft)</label>
+                            <input type="number" id="max-size" placeholder="e.g. 520" min="0">
+                        </div>
+                        <button id="reset-size-btn" class="secondary-btn">Reset</button>
+                    </div>
+                </div>
+
+                <!-- Cascading Selectors -->
+                <div class="card selector-card">
+                    <div class="card-header select-header">
+                        <span class="icon">🏢</span>
+                        <h2>Select Flat</h2>
+                        <span class="match-badge" id="match-badge">0 matching</span>
+                    </div>
+
+                    <div class="selectors-grid">
+                        <div class="selector-group">
+                            <label for="block-select">Block / Tower</label>
+                            <select id="block-select" disabled>
+                                <option value="">Loading blocks...</option>
+                            </select>
+                        </div>
+
+                        <div class="selector-group">
+                            <label for="floor-select">Floor</label>
+                            <select id="floor-select" disabled>
+                                <option value="">Select block first</option>
+                            </select>
+                        </div>
+
+                        <div class="selector-group">
+                            <label for="flat-select">Flat Letter</label>
+                            <select id="flat-select" disabled>
+                                <option value="">Select floor first</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Information Details Card -->
+            <section class="details-panel">
+                <!-- Interactive Master Layout Map Card -->
+                <div class="card map-card">
+                    <div class="card-header select-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="icon">🗺️</span>
+                            <h2>Master Layout Plan</h2>
+                        </div>
+                        <span class="map-hint" id="map-hint">Select a flat to locate on map</span>
+                    </div>
+                    <div class="map-container">
+                        <div class="map-wrapper">
+                            <img src="HemmaSapphire/20260508201120_1_desktop.png" alt="Hemma Sapphire Master Plan" class="map-image" id="map-image">
+                            <!-- Dynamic active highlight marker -->
+                            <div class="map-marker hidden" id="map-marker"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card details-card" id="details-card">
+                    <!-- Empty State (Shown initially) -->
+                    <div class="empty-state" id="empty-state">
+                        <div class="empty-illustration">🔍</div>
+                        <h3>No Flat Selected</h3>
+                        <p>Apply filters and choose a flat from the selectors to see full sizing, pricing, and unit rate analysis.</p>
+                    </div>
+
+                    <!-- Dynamic Details Content (Hidden initially) -->
+                    <div class="details-content hidden" id="details-content">
+                        <div class="flat-title-bar">
+                            <span class="flat-badge" id="detail-block-badge">Tower 1A</span>
+                            <h2 class="flat-id"><span id="detail-floor">Floor 2</span>, Flat <span id="detail-flat">A</span></h2>
+                        </div>
+
+                        <!-- Price Section (Large & Polished) -->
+                        <div class="detail-section price-section">
+                            <div class="detail-label">PRICE (HKD)</div>
+                            <div class="detail-value price-value" id="detail-price">$0</div>
+                        </div>
+
+                        <!-- Size Grid -->
+                        <div class="detail-section grid-section">
+                            <div class="grid-card size-card">
+                                <div class="grid-card-label">Saleable Area</div>
+                                <div class="grid-card-main-val"><span id="detail-size-ft">0</span> <span class="unit">sq. ft.</span></div>
+                                <div class="grid-card-sub-val"><span id="detail-size-m">0</span> sq. m.</div>
+                            </div>
+
+                            <div class="grid-card rate-card">
+                                <div class="grid-card-label">Unit Rate</div>
+                                <div class="grid-card-main-val"><span id="detail-rate-ft">$0</span> <span class="unit">/ sq. ft.</span></div>
+                                <div class="grid-card-sub-val"><span id="detail-rate-m">$0</span> / sq. m.</div>
+                            </div>
+                        </div>
+
+                        <!-- Balcony & Utility Platform Areas -->
+                        <div class="detail-section features-section">
+                            <h3>Outdoor Features</h3>
+                            <div class="features-row">
+                                <div class="feature-item" id="feature-balcony-container">
+                                    <span class="feature-icon">🌅</span>
+                                    <div class="feature-text">
+                                        <div class="feature-title">Balcony (露台)</div>
+                                        <div class="feature-val"><span id="detail-balcony">0</span> sq. m.</div>
+                                    </div>
+                                </div>
+                                <div class="feature-item" id="feature-utility-container">
+                                    <span class="feature-icon">🧺</span>
+                                    <div class="feature-text">
+                                        <div class="feature-title">Utility Platform (工作平台)</div>
+                                        <div class="feature-val"><span id="detail-utility">0</span> sq. m.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="public/flats_data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
