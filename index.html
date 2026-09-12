@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hemma Sapphire - Flat Price & Size Interactive Viewer</title>
+    <title>Hemma Sapphire - 灝然 住宅單位售價及面積互動目錄</title>
     <link rel="stylesheet" href="styles.css">
     <!-- Google Fonts for modern typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,9 +21,9 @@
         <header class="app-header">
             <div class="logo">
                 <span class="logo-icon">💎</span>
-                <h1>Hemma Sapphire</h1>
+                <h1>Hemma Sapphire 灝然</h1>
             </div>
-            <p class="subtitle">Residential Flat Interactive Sizing & Price Directory</p>
+            <p class="subtitle">住宅單位面積及售價互動目錄 (Interactive Directory)</p>
         </header>
 
         <!-- Main Workspace -->
@@ -34,58 +34,60 @@
                 <div class="card filter-card">
                     <div class="card-header">
                         <span class="icon">📐</span>
-                        <h2>Filter by Flat Size</h2>
+                        <h2>按單位面積篩選 (Flat Size Filter)</h2>
                     </div>
                     
                     <!-- Preset Sizing Tags -->
                     <div class="filter-presets">
-                        <button class="preset-btn active" data-preset="all">All Sizes</button>
-                        <button class="preset-btn" data-preset="small">Compact (&lt; 350 sq.ft)</button>
-                        <button class="preset-btn" data-preset="medium">Mid-Size (350 - 450 sq.ft)</button>
-                        <button class="preset-btn" data-preset="large">Spacious (&gt; 450 sq.ft)</button>
+                        <button class="preset-btn active" data-preset="all">所有面積 (All)</button>
+                        <button class="preset-btn" data-preset="small">精緻戶型 (&lt; 350 呎)</button>
+                        <button class="preset-btn" data-preset="medium">標準戶型 (350 - 450 呎)</button>
+                        <button class="preset-btn" data-preset="large">寬敞戶型 (&gt; 450 呎)</button>
                     </div>
 
                     <!-- Custom Sizing Inputs -->
                     <div class="custom-range">
                         <div class="range-group">
-                            <label for="min-size">Min Size (sq.ft)</label>
-                            <input type="number" id="min-size" placeholder="e.g. 300" min="0">
+                            <label for="min-size">最小面積 (平方呎)</label>
+                            <input type="number" id="min-size" placeholder="例如: 300" min="0">
                         </div>
                         <div class="range-group">
-                            <label for="max-size">Max Size (sq.ft)</label>
-                            <input type="number" id="max-size" placeholder="e.g. 520" min="0">
+                            <label for="max-size">最大面積 (平方呎)</label>
+                            <input type="number" id="max-size" placeholder="例如: 520" min="0">
                         </div>
-                        <button id="reset-size-btn" class="secondary-btn">Reset</button>
+                        <button id="reset-size-btn" class="secondary-btn">重置</button>
                     </div>
                 </div>
 
                 <!-- Cascading Selectors -->
                 <div class="card selector-card">
                     <div class="card-header select-header">
-                        <span class="icon">🏢</span>
-                        <h2>Select Flat</h2>
-                        <span class="match-badge" id="match-badge">0 matching</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="icon">🏢</span>
+                            <h2>選擇單位 (Select Flat)</h2>
+                        </div>
+                        <span class="match-badge" id="match-badge">0 個符合</span>
                     </div>
 
                     <div class="selectors-grid">
                         <div class="selector-group">
-                            <label for="block-select">Block / Tower</label>
+                            <label for="block-select">大廈座數 (Block / Tower)</label>
                             <select id="block-select" disabled>
-                                <option value="">Loading blocks...</option>
+                                <option value="">正在加載座數...</option>
                             </select>
                         </div>
 
                         <div class="selector-group">
-                            <label for="floor-select">Floor</label>
+                            <label for="floor-select">樓層 (Floor)</label>
                             <select id="floor-select" disabled>
-                                <option value="">Select block first</option>
+                                <option value="">請先選擇大廈</option>
                             </select>
                         </div>
 
                         <div class="selector-group">
-                            <label for="flat-select">Flat Letter</label>
+                            <label for="flat-select">單位代號 (Flat)</label>
                             <select id="flat-select" disabled>
-                                <option value="">Select floor first</option>
+                                <option value="">請先選擇樓層</option>
                             </select>
                         </div>
                     </div>
@@ -99,9 +101,9 @@
                     <div class="card-header select-header">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <span class="icon">🗺️</span>
-                            <h2>Master Layout Plan</h2>
+                            <h2>項目總平面圖 (Master Layout Plan)</h2>
                         </div>
-                        <span class="map-hint" id="map-hint">Select a flat to locate on map</span>
+                        <span class="map-hint" id="map-hint">選擇單位以在平面圖上定位</span>
                     </div>
                     <div class="map-container">
                         <div class="map-wrapper">
@@ -116,54 +118,54 @@
                     <!-- Empty State (Shown initially) -->
                     <div class="empty-state" id="empty-state">
                         <div class="empty-illustration">🔍</div>
-                        <h3>No Flat Selected</h3>
-                        <p>Apply filters and choose a flat from the selectors to see full sizing, pricing, and unit rate analysis.</p>
+                        <h3>未選擇單位</h3>
+                        <p>請於左側選擇一個單位，或調整面積篩選條件，以查看詳細的實用面積、售價、呎價及平面圖位置。</p>
                     </div>
 
                     <!-- Dynamic Details Content (Hidden initially) -->
                     <div class="details-content hidden" id="details-content">
                         <div class="flat-title-bar">
                             <span class="flat-badge" id="detail-block-badge">Tower 1A</span>
-                            <h2 class="flat-id"><span id="detail-floor">Floor 2</span>, Flat <span id="detail-flat">A</span></h2>
+                            <h2 class="flat-id"><span id="detail-floor">2 樓</span>, <span id="detail-flat">A</span> 單位</h2>
                         </div>
 
                         <!-- Price Section (Large & Polished) -->
                         <div class="detail-section price-section">
-                            <div class="detail-label">PRICE (HKD)</div>
+                            <div class="detail-label">單位售價 (PRICE HKD)</div>
                             <div class="detail-value price-value" id="detail-price">$0</div>
                         </div>
 
                         <!-- Size Grid -->
                         <div class="detail-section grid-section">
                             <div class="grid-card size-card">
-                                <div class="grid-card-label">Saleable Area</div>
-                                <div class="grid-card-main-val"><span id="detail-size-ft">0</span> <span class="unit">sq. ft.</span></div>
-                                <div class="grid-card-sub-val"><span id="detail-size-m">0</span> sq. m.</div>
+                                <div class="grid-card-label">實用面積 (Saleable Area)</div>
+                                <div class="grid-card-main-val"><span id="detail-size-ft">0</span> <span class="unit">平方呎 (sq. ft.)</span></div>
+                                <div class="grid-card-sub-val"><span id="detail-size-m">0</span> 平方米 (sq. m.)</div>
                             </div>
 
                             <div class="grid-card rate-card">
-                                <div class="grid-card-label">Unit Rate</div>
-                                <div class="grid-card-main-val"><span id="detail-rate-ft">$0</span> <span class="unit">/ sq. ft.</span></div>
-                                <div class="grid-card-sub-val"><span id="detail-rate-m">$0</span> / sq. m.</div>
+                                <div class="grid-card-label">實用面積呎價/平米價</div>
+                                <div class="grid-card-main-val"><span id="detail-rate-ft">$0</span> <span class="unit">/ 平方呎</span></div>
+                                <div class="grid-card-sub-val"><span id="detail-rate-m">$0</span> / 平方米</div>
                             </div>
                         </div>
 
                         <!-- Balcony & Utility Platform Areas -->
                         <div class="detail-section features-section">
-                            <h3>Outdoor Features</h3>
+                            <h3>戶外附屬設施 (Outdoor Features)</h3>
                             <div class="features-row">
                                 <div class="feature-item" id="feature-balcony-container">
                                     <span class="feature-icon">🌅</span>
                                     <div class="feature-text">
-                                        <div class="feature-title">Balcony (露台)</div>
-                                        <div class="feature-val"><span id="detail-balcony">0</span> sq. m.</div>
+                                        <div class="feature-title">露台 (Balcony)</div>
+                                        <div class="feature-val"><span id="detail-balcony">0</span> 平方米</div>
                                     </div>
                                 </div>
                                 <div class="feature-item" id="feature-utility-container">
                                     <span class="feature-icon">🧺</span>
                                     <div class="feature-text">
-                                        <div class="feature-title">Utility Platform (工作平台)</div>
-                                        <div class="feature-val"><span id="detail-utility">0</span> sq. m.</div>
+                                        <div class="feature-title">工作平台 (Utility Platform)</div>
+                                        <div class="feature-val"><span id="detail-utility">0</span> 平方米</div>
                                     </div>
                                 </div>
                             </div>

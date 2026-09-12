@@ -1,6 +1,5 @@
 /* ==========================================================================
-   HEMMA SAPPHIRE - INTERACTIVE CLIENT ENGINE
-   Cascading Dropdowns, Interactive Filters, and Details Renderer
+   HEMMA SAPPHIRE - 灝然 互動檢視引擎 (Traditional Chinese Version)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -142,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     function init() {
         try {
-            // Load from global JavaScript variable (bypasses local CORS restrictions)
             if (typeof allFlatsData !== 'undefined') {
                 allFlats = allFlatsData;
             } else {
@@ -150,32 +148,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             filteredFlats = [...allFlats];
-            
-            // Enable selectors and populate initial block dropdown
             blockSelect.removeAttribute('disabled');
             applyFiltersAndRebuildDropdowns();
             
-            console.log(`Loaded ${allFlats.length} flats successfully from static variable.`);
+            console.log(`Loaded ${allFlats.length} flats successfully.`);
         } catch (error) {
             console.error('Initialization error:', error);
-            blockSelect.innerHTML = `<option value="">Error loading data: Local CORS issue or missing public/flats_data.js</option>`;
+            blockSelect.innerHTML = `<option value="">加載數據失敗：CORS限制或缺失 flats_data.js</option>`;
         }
     }
 
     // ==========================================================================
     // 2. Interactive Filtering Logic
     // ==========================================================================
-    
-    // Preset Sizing click handlers
     presetBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            // Manage active button state
             presetBtns.forEach(b => b.classList.remove('active'));
             e.target.classList.add('active');
             
             const preset = e.target.dataset.preset;
             
-            // Set input values based on preset
             if (preset === 'all') {
                 minSizeInput.value = '';
                 maxSizeInput.value = '';
@@ -194,12 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Custom Size Range input handlers
     const onRangeInput = () => {
-        // Clear active states from presets since we are using custom range
         presetBtns.forEach(btn => btn.classList.remove('active'));
         
-        // Find if any preset matches the custom numbers to highlight it
         const minVal = minSizeInput.value;
         const maxVal = maxSizeInput.value;
         
@@ -219,7 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
     minSizeInput.addEventListener('input', onRangeInput);
     maxSizeInput.addEventListener('input', onRangeInput);
 
-    // Reset size filters
     resetSizeBtn.addEventListener('click', () => {
         minSizeInput.value = '';
         maxSizeInput.value = '';
@@ -228,38 +216,31 @@ document.addEventListener('DOMContentLoaded', () => {
         applyFiltersAndRebuildDropdowns();
     });
 
-    // Main filter function
     function applyFiltersAndRebuildDropdowns() {
         const min = minSizeInput.value ? parseInt(minSizeInput.value, 10) : 0;
         const max = maxSizeInput.value ? parseInt(maxSizeInput.value, 10) : Infinity;
         
-        // Filter flats by active size criteria
         filteredFlats = allFlats.filter(flat => {
             const sqFt = flat.size_sq_ft;
             return sqFt >= min && sqFt <= max;
         });
 
-        // Update the match badge count
         if (matchBadge) {
-            matchBadge.textContent = `${filteredFlats.length} matching`;
+            matchBadge.textContent = `${filteredFlats.length} 個符合單位`;
         }
         
-        // Rebuild cascading selects while preserving user selections where possible
         const prevSelectedBlock = blockSelect.value;
         const prevSelectedFloor = floorSelect.value;
         const prevSelectedFlat = flatSelect.value;
         
         populateBlocks(prevSelectedBlock);
         
-        // If the previously selected block is still valid, repopulate floors
         if (blockSelect.value) {
             populateFloors(blockSelect.value, prevSelectedFloor);
             
-            // If the previously selected floor is still valid, repopulate flats
             if (floorSelect.value) {
                 populateFlats(blockSelect.value, floorSelect.value, prevSelectedFlat);
                 
-                // If the previously selected flat is still valid, show details
                 if (flatSelect.value) {
                     renderFlatDetails(blockSelect.value, floorSelect.value, flatSelect.value);
                     return;
@@ -267,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // If cascading chain broke at any point, reset downstream and details card
         if (!flatSelect.value) {
             clearFlatDetails();
         }
@@ -277,13 +257,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Cascading Dropdown Populators
     // ==========================================================================
 
-    // Populates Blocks
     function populateBlocks(selectedValue = '') {
         const blocks = [...new Set(filteredFlats.map(f => f.block))];
         
-        // Sort blocks, e.g. Tower 1A, 1B, 2A etc.
         blocks.sort((a, b) => {
-            // Extract numeric and letter parts to sort logically (e.g. Tower 1B before Tower 2A)
             const getSortKey = (str) => {
                 const match = str.match(/Tower\s+(\d+)([A-Z])/i);
                 if (match) {
@@ -299,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (blocks.length === 0) {
-            blockSelect.innerHTML = `<option value="">No blocks match filters</option>`;
+            blockSelect.innerHTML = `<option value="">無符合篩選條件的座數</option>`;
             blockSelect.setAttribute('disabled', 'true');
             floorSelect.innerHTML = `<option value="">--</option>`;
             floorSelect.setAttribute('disabled', 'true');
@@ -309,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         blockSelect.removeAttribute('disabled');
-        let html = `<option value="">-- Select Block / Tower --</option>`;
+        let html = `<option value="">-- 選擇大廈 / 座數 (Block) --</option>`;
         blocks.forEach(block => {
             html += `<option value="${block}">${block}</option>`;
         });
@@ -319,30 +296,29 @@ document.addEventListener('DOMContentLoaded', () => {
             blockSelect.value = selectedValue;
         } else {
             blockSelect.value = '';
-            floorSelect.innerHTML = `<option value="">Select block first</option>`;
+            floorSelect.innerHTML = `<option value="">請先選擇大廈</option>`;
             floorSelect.setAttribute('disabled', 'true');
-            flatSelect.innerHTML = `<option value="">Select floor first</option>`;
+            flatSelect.innerHTML = `<option value="">請先選擇樓層</option>`;
             flatSelect.setAttribute('disabled', 'true');
         }
     }
 
-    // Populates Floors based on Block
     function populateFloors(block, selectedValue = '') {
         if (!block) {
-            floorSelect.innerHTML = `<option value="">Select block first</option>`;
+            floorSelect.innerHTML = `<option value="">請先選擇大廈</option>`;
             floorSelect.setAttribute('disabled', 'true');
-            flatSelect.innerHTML = `<option value="">Select floor first</option>`;
+            flatSelect.innerHTML = `<option value="">請先選擇樓層</option>`;
             flatSelect.setAttribute('disabled', 'true');
             return;
         }
 
         const floors = [...new Set(filteredFlats.filter(f => f.block === block).map(f => f.floor))];
-        floors.sort((a, b) => a - b); // Numerical sorting
+        floors.sort((a, b) => a - b);
 
         floorSelect.removeAttribute('disabled');
-        let html = `<option value="">-- Select Floor --</option>`;
+        let html = `<option value="">-- 選擇樓層 (Floor) --</option>`;
         floors.forEach(floor => {
-            html += `<option value="${floor}">${floor}/F</option>`;
+            html += `<option value="${floor}">${floor} 樓 (${floor}/F)</option>`;
         });
         floorSelect.innerHTML = html;
 
@@ -351,15 +327,14 @@ document.addEventListener('DOMContentLoaded', () => {
             floorSelect.value = valString;
         } else {
             floorSelect.value = '';
-            flatSelect.innerHTML = `<option value="">Select floor first</option>`;
+            flatSelect.innerHTML = `<option value="">請先選擇樓層</option>`;
             flatSelect.setAttribute('disabled', 'true');
         }
     }
 
-    // Populates Flats based on Block & Floor
     function populateFlats(block, floor, selectedValue = '') {
         if (!block || !floor) {
-            flatSelect.innerHTML = `<option value="">Select floor first</option>`;
+            flatSelect.innerHTML = `<option value="">請先選擇樓層</option>`;
             flatSelect.setAttribute('disabled', 'true');
             return;
         }
@@ -367,12 +342,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const flats = [...new Set(filteredFlats
             .filter(f => f.block === block && f.floor === parseInt(floor, 10))
             .map(f => f.flat))];
-        flats.sort(); // Alphabetical sorting
+        flats.sort();
 
         flatSelect.removeAttribute('disabled');
-        let html = `<option value="">-- Select Flat --</option>`;
+        let html = `<option value="">-- 選擇單位 (Flat) --</option>`;
         flats.forEach(flat => {
-            html += `<option value="${flat}">Flat ${flat}</option>`;
+            html += `<option value="${flat}">Flat ${flat} 單位</option>`;
         });
         flatSelect.innerHTML = html;
 
@@ -429,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Populate Badge and Header
         detailBlockBadge.textContent = block;
-        detailFloor.textContent = `${parsedFloor}/F`;
+        detailFloor.textContent = `${parsedFloor} 樓 (${parsedFloor}/F)`;
         detailFlat.textContent = flat;
 
         // Populate Sizing Details
@@ -440,20 +415,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (flatObj.price) {
             detailPrice.textContent = `$${flatObj.price.toLocaleString()}`;
         } else {
-            detailPrice.textContent = 'N/A';
+            detailPrice.textContent = '暫無資料';
         }
 
         // Populate Unit Rates
         if (flatObj.unit_rate_sq_ft) {
             detailRateFt.textContent = `$${flatObj.unit_rate_sq_ft.toLocaleString()}`;
         } else {
-            detailRateFt.textContent = 'N/A';
+            detailRateFt.textContent = '暫無資料';
         }
 
         if (flatObj.unit_rate_sq_m) {
             detailRateM.textContent = `$${flatObj.unit_rate_sq_m.toLocaleString()}`;
         } else {
-            detailRateM.textContent = 'N/A';
+            detailRateM.textContent = '暫無資料';
         }
 
         // Populate Outdoor Features (Balcony and Utility Platform)
@@ -480,14 +455,14 @@ document.addEventListener('DOMContentLoaded', () => {
             mapMarker.style.top = `${coord.y}%`;
             mapMarker.classList.remove('hidden');
             if (mapHint) {
-                mapHint.textContent = `Located: ${block}, Flat ${flat}`;
+                mapHint.textContent = `已定位：${block} Floor ${parsedFloor}, Flat ${flat}`;
                 mapHint.style.borderColor = 'rgba(223, 176, 108, 0.4)';
                 mapHint.style.color = 'var(--gold)';
             }
         } else {
             if (mapMarker) mapMarker.classList.add('hidden');
             if (mapHint) {
-                mapHint.textContent = "Select a flat to locate on map";
+                mapHint.textContent = "選擇單位以在平面圖上定位";
                 mapHint.style.borderColor = '';
                 mapHint.style.color = '';
             }
@@ -499,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
         detailsContent.classList.add('hidden');
         if (mapMarker) mapMarker.classList.add('hidden');
         if (mapHint) {
-            mapHint.textContent = "Select a flat to locate on map";
+            mapHint.textContent = "選擇單位以在平面圖上定位";
             mapHint.style.borderColor = '';
             mapHint.style.color = '';
         }
