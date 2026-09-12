@@ -23,6 +23,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const mapMarker = document.getElementById('map-marker');
     const mapHint = document.getElementById('map-hint');
     const mapWrapper = document.querySelector('.map-wrapper');
+    const mapInner = document.getElementById('map-inner');
+
+    // Center coordinates (X, Y) of each building block for zooming
+    const BLOCK_CENTERS = {
+        "第1A座 Tower 1A": { x: 15.0, y: 66.0 },
+        "第1B座 Tower 1B": { x: 26.0, y: 68.0 },
+        "第2A座 Tower 2A": { x: 11.0, y: 43.0 },
+        "第2B座 Tower 2B": { x: 20.0, y: 33.0 },
+        "第3A座 Tower 3A": { x: 35.0, y: 25.0 },
+        "第3B座 Tower 3B": { x: 47.0, y: 25.0 },
+        "第4A座 Tower 4A": { x: 64.0, y: 41.0 },
+        "第4B座 Tower 4B": { x: 74.0, y: 61.0 },
+        "第5A座 Tower 5A": { x: 55.0, y: 70.0 },
+        "第5B座 Tower 5B": { x: 65.0, y: 71.0 }
+    };
 
     // Percentage coordinates (X, Y) of each flat on the master plan image
     const FLAT_COORDINATES = {
@@ -251,6 +266,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!flatSelect.value) {
             clearFlatDetails();
         }
+
+        // Dynamic automatic zooming on active block selection
+        zoomToBlock(blockSelect.value);
+    }
+
+    // Handles map panned zooming focusing on selected building tower
+    function zoomToBlock(blockName) {
+        if (mapInner && BLOCK_CENTERS[blockName]) {
+            const center = BLOCK_CENTERS[blockName];
+            mapInner.style.transformOrigin = `${center.x}% ${center.y}%`;
+            mapInner.style.transform = 'scale(2.4)';
+        } else if (mapInner) {
+            mapInner.style.transformOrigin = '50% 50%';
+            mapInner.style.transform = 'scale(1)';
+        }
     }
 
     // ==========================================================================
@@ -365,6 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const block = e.target.value;
         populateFloors(block);
         clearFlatDetails();
+        zoomToBlock(block); // Instant smooth zoom when block selection is changed
     });
 
     floorSelect.addEventListener('change', (e) => {
