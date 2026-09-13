@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const maxPriceInput = document.getElementById('max-price');
     const resetPriceBtn = document.getElementById('reset-price-btn');
     
+    // DOM Elements - Estate Selector
+    const estateSelect = document.getElementById('estate-select');
+    
     // DOM Elements - Dropdown Selectors
     const blockSelect = document.getElementById('block-select');
     const floorSelect = document.getElementById('floor-select');
@@ -158,16 +161,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const featureUtilityContainer = document.getElementById('feature-utility-container');
 
     // ==========================================================================
-    // 1. Data Initialization
+    // 1. Data Initialization & Multi-Estate Management
     // ==========================================================================
-    function init() {
+    function initWithData(data) {
         try {
-            if (typeof allFlatsData !== 'undefined') {
-                allFlats = allFlatsData;
-            } else {
-                throw new Error("allFlatsData is undefined. Ensure public/flats_data.js is loaded first.");
-            }
-            
+            allFlats = data;
             filteredFlats = [...allFlats];
             blockSelect.removeAttribute('disabled');
             applyFiltersAndRebuildDropdowns();
@@ -175,7 +173,16 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Loaded ${allFlats.length} flats successfully.`);
         } catch (error) {
             console.error('Initialization error:', error);
-            blockSelect.innerHTML = `<option value="">加載數據失敗：CORS限制或缺失 flats_data.js</option>`;
+            blockSelect.innerHTML = `<option value="">加載數據失敗：數據格式不正確</option>`;
+        }
+    }
+
+    function init() {
+        if (typeof allFlatsData !== 'undefined') {
+            initWithData(allFlatsData);
+        } else {
+            console.warn("allFlatsData is undefined. Waiting for script to load...");
+            blockSelect.innerHTML = `<option value="">正在載入項目數據...</option>`;
         }
     }
 
@@ -590,6 +597,62 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(`Dev Coordinates:\nx: ${x.toFixed(1)},\ny: ${y.toFixed(1)}`);
             }
         });
+    }
+
+    // ==========================================================================
+    // 7. Multi-Estate Dynamic Loader (CORS-free file:// compatible)
+    // ==========================================================================
+    if (estateSelect) {
+        estateSelect.addEventListener('change', (e) => {
+            const estate = e.target.value;
+            loadEstateData(estate);
+        });
+    }
+
+    function loadEstateData(estateValue) {
+        // Clear current elements while loading
+        blockSelect.setAttribute('disabled', 'true');
+        blockSelect.innerHTML = `<option value="">正在載入項目數據...</option>`;
+        floorSelect.setAttribute('disabled', 'true');
+        floorSelect.innerHTML = `<option value="">請先選擇大廈</option>`;
+        flatSelect.setAttribute('disabled', 'true');
+        flatSelect.innerHTML = `<option value="">請先選擇樓層</option>`;
+        clearFlatDetails();
+
+        // Reset inputs and filters
+        minSizeInput.value = '';
+        maxSizeInput.value = '';
+        sizePresetBtns.forEach(btn => btn.classList.remove('active'));
+        const sizeAllBtn = document.querySelector('#size-filter-card [data-preset="all"]');
+        if (sizeAllBtn) sizeAllBtn.classList.add('active');
+
+        minPriceInput.value = '';
+        maxPriceInput.value = '';
+        pricePresetBtns.forEach(btn => btn.classList.remove('active'));
+        const priceAllBtn = document.querySelector('#price-filter-card [data-price-preset="all"]');
+        if (priceAllBtn) priceAllBtn.classList.add('active');
+
+        // Remove old dynamic script tag
+        const oldScript = document.getElementById('dynamic-estate-script');
+        if (oldScript) {
+            oldScript.remove();
+        }
+
+        // Add new script tag to load the selected estate data
+        const script = document.createElement('script');
+        script.id = 'dynamic-estate-script';
+        script.src = `public/${estateValue}_data.js`;
+        script.onload = () => {
+            if (typeof allFlatsData !== 'undefined') {
+                initWithData(allFlatsData);
+            } else {
+                blockSelect.innerHTML = `<option value="">載入失敗：數據不完整</option>`;
+            }
+        };
+        script.onerror = () => {
+            blockSelect.innerHTML = `<option value="">載入失敗：請確認新增的 public/${estateValue}_data.js 是否存在</option>`;
+        };
+        document.body.appendChild(script);
     }
 
     // Initialize the application!

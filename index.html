@@ -30,6 +30,23 @@
         <main class="app-main">
             <!-- Left Panel: Filters & Selectors -->
             <section class="control-panel">
+                <!-- Estate Selection Card -->
+                <div class="card selector-card" id="estate-filter-card">
+                    <div class="card-header">
+                        <span class="icon">🏡</span>
+                        <h2>選擇住宅項目 (Housing Estate)</h2>
+                    </div>
+                    <div class="selectors-grid">
+                        <div class="selector-group">
+                            <label for="estate-select">項目名稱 (Estate Name)</label>
+                            <select id="estate-select">
+                                <option value="HemmaSapphire" selected>Hemma Sapphire 灝然</option>
+                                <!-- User can add other housing estates here -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Sizing Filters -->
                 <div class="card filter-card" id="size-filter-card">
                     <div class="card-header">
@@ -207,7 +224,7 @@
         </main>
     </div>
 
-    <script src="public/flats_data.js"></script>
+    <script id="dynamic-estate-script" src="public/HemmaSapphire_data.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
