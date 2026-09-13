@@ -8,10 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let filteredFlats = [];
     
     // DOM Elements - Sizing Filters
-    const presetBtns = document.querySelectorAll('.preset-btn');
+    const sizePresetBtns = document.querySelectorAll('#size-filter-card .preset-btn');
     const minSizeInput = document.getElementById('min-size');
     const maxSizeInput = document.getElementById('max-size');
     const resetSizeBtn = document.getElementById('reset-size-btn');
+    
+    // DOM Elements - Price Filters
+    const pricePresetBtns = document.querySelectorAll('#price-filter-card .preset-btn');
+    const minPriceInput = document.getElementById('min-price');
+    const maxPriceInput = document.getElementById('max-price');
+    const resetPriceBtn = document.getElementById('reset-price-btn');
     
     // DOM Elements - Dropdown Selectors
     const blockSelect = document.getElementById('block-select');
@@ -176,9 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // 2. Interactive Filtering Logic
     // ==========================================================================
-    presetBtns.forEach(btn => {
+    
+    // --- Sizing Filters ---
+    sizePresetBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            presetBtns.forEach(b => b.classList.remove('active'));
+            sizePresetBtns.forEach(b => b.classList.remove('active'));
             e.target.classList.add('active');
             
             const preset = e.target.dataset.preset;
@@ -201,43 +209,103 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const onRangeInput = () => {
-        presetBtns.forEach(btn => btn.classList.remove('active'));
+    const onSizeRangeInput = () => {
+        sizePresetBtns.forEach(btn => btn.classList.remove('active'));
         
         const minVal = minSizeInput.value;
         const maxVal = maxSizeInput.value;
         
         if (minVal === '' && maxVal === '') {
-            document.querySelector('[data-preset="all"]').classList.add('active');
+            document.querySelector('#size-filter-card [data-preset="all"]').classList.add('active');
         } else if (minVal === '' && maxVal === '349') {
-            document.querySelector('[data-preset="small"]').classList.add('active');
+            document.querySelector('#size-filter-card [data-preset="small"]').classList.add('active');
         } else if (minVal === '350' && maxVal === '450') {
-            document.querySelector('[data-preset="medium"]').classList.add('active');
+            document.querySelector('#size-filter-card [data-preset="medium"]').classList.add('active');
         } else if (minVal === '451' && maxVal === '') {
-            document.querySelector('[data-preset="large"]').classList.add('active');
+            document.querySelector('#size-filter-card [data-preset="large"]').classList.add('active');
         }
         
         applyFiltersAndRebuildDropdowns();
     };
 
-    minSizeInput.addEventListener('input', onRangeInput);
-    maxSizeInput.addEventListener('input', onRangeInput);
+    minSizeInput.addEventListener('input', onSizeRangeInput);
+    maxSizeInput.addEventListener('input', onSizeRangeInput);
 
     resetSizeBtn.addEventListener('click', () => {
         minSizeInput.value = '';
         maxSizeInput.value = '';
-        presetBtns.forEach(btn => btn.classList.remove('active'));
-        document.querySelector('[data-preset="all"]').classList.add('active');
+        sizePresetBtns.forEach(btn => btn.classList.remove('active'));
+        document.querySelector('#size-filter-card [data-preset="all"]').classList.add('active');
+        applyFiltersAndRebuildDropdowns();
+    });
+
+    // --- Price Filters ---
+    pricePresetBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            pricePresetBtns.forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            
+            const preset = e.target.dataset.pricePreset;
+            
+            if (preset === 'all') {
+                minPriceInput.value = '';
+                maxPriceInput.value = '';
+            } else if (preset === 'small') {
+                minPriceInput.value = '';
+                maxPriceInput.value = '349';
+            } else if (preset === 'medium') {
+                minPriceInput.value = '350';
+                maxPriceInput.value = '450';
+            } else if (preset === 'large') {
+                minPriceInput.value = '451';
+                maxPriceInput.value = '';
+            }
+            
+            applyFiltersAndRebuildDropdowns();
+        });
+    });
+
+    const onPriceRangeInput = () => {
+        pricePresetBtns.forEach(btn => btn.classList.remove('active'));
+        
+        const minVal = minPriceInput.value;
+        const maxVal = maxPriceInput.value;
+        
+        if (minVal === '' && maxVal === '') {
+            document.querySelector('#price-filter-card [data-price-preset="all"]').classList.add('active');
+        } else if (minVal === '' && maxVal === '349') {
+            document.querySelector('#price-filter-card [data-price-preset="small"]').classList.add('active');
+        } else if (minVal === '350' && maxVal === '450') {
+            document.querySelector('#price-filter-card [data-price-preset="medium"]').classList.add('active');
+        } else if (minVal === '451' && maxVal === '') {
+            document.querySelector('#price-filter-card [data-price-preset="large"]').classList.add('active');
+        }
+        
+        applyFiltersAndRebuildDropdowns();
+    };
+
+    minPriceInput.addEventListener('input', onPriceRangeInput);
+    maxPriceInput.addEventListener('input', onPriceRangeInput);
+
+    resetPriceBtn.addEventListener('click', () => {
+        minPriceInput.value = '';
+        maxPriceInput.value = '';
+        pricePresetBtns.forEach(btn => btn.classList.remove('active'));
+        document.querySelector('#price-filter-card [data-price-preset="all"]').classList.add('active');
         applyFiltersAndRebuildDropdowns();
     });
 
     function applyFiltersAndRebuildDropdowns() {
-        const min = minSizeInput.value ? parseInt(minSizeInput.value, 10) : 0;
-        const max = maxSizeInput.value ? parseInt(maxSizeInput.value, 10) : Infinity;
+        const minSize = minSizeInput.value ? parseInt(minSizeInput.value, 10) : 0;
+        const maxSize = maxSizeInput.value ? parseInt(maxSizeInput.value, 10) : Infinity;
+        
+        const minPrice = minPriceInput.value ? parseInt(minPriceInput.value, 10) * 10000 : 0;
+        const maxPrice = maxPriceInput.value ? parseInt(maxPriceInput.value, 10) * 10000 : Infinity;
         
         filteredFlats = allFlats.filter(flat => {
             const sqFt = flat.size_sq_ft;
-            return sqFt >= min && sqFt <= max;
+            const price = flat.price || 0;
+            return sqFt >= minSize && sqFt <= maxSize && price >= minPrice && price <= maxPrice;
         });
 
         if (matchBadge) {

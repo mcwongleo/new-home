@@ -31,7 +31,7 @@
             <!-- Left Panel: Filters & Selectors -->
             <section class="control-panel">
                 <!-- Sizing Filters -->
-                <div class="card filter-card">
+                <div class="card filter-card" id="size-filter-card">
                     <div class="card-header">
                         <span class="icon">📐</span>
                         <h2>按單位面積篩選 (Flat Size Filter)</h2>
@@ -56,6 +56,35 @@
                             <input type="number" id="max-size" placeholder="例如: 520" min="0">
                         </div>
                         <button id="reset-size-btn" class="secondary-btn">重置</button>
+                    </div>
+                </div>
+
+                <!-- Price Filters -->
+                <div class="card filter-card" id="price-filter-card">
+                    <div class="card-header">
+                        <span class="icon">💰</span>
+                        <h2>按單位售價篩選 (Flat Price Filter)</h2>
+                    </div>
+                    
+                    <!-- Preset Price Tags -->
+                    <div class="filter-presets">
+                        <button class="preset-btn active" data-price-preset="all">所有售價 (All)</button>
+                        <button class="preset-btn" data-price-preset="small">入門選擇 (&lt; 350 萬)</button>
+                        <button class="preset-btn" data-price-preset="medium">中階選擇 (350 - 450 萬)</button>
+                        <button class="preset-btn" data-price-preset="large">尊貴選擇 (&gt; 450 萬)</button>
+                    </div>
+
+                    <!-- Custom Price Inputs -->
+                    <div class="custom-range">
+                        <div class="range-group">
+                            <label for="min-price">最小售價 (萬元)</label>
+                            <input type="number" id="min-price" placeholder="例如: 300" min="0">
+                        </div>
+                        <div class="range-group">
+                            <label for="max-price">最大售價 (萬元)</label>
+                            <input type="number" id="max-price" placeholder="例如: 450" min="0">
+                        </div>
+                        <button id="reset-price-btn" class="secondary-btn">重置</button>
                     </div>
                 </div>
 
