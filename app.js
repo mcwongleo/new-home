@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mapHint = document.getElementById('map-hint');
     const mapWrapper = document.querySelector('.map-wrapper');
     const mapInner = document.getElementById('map-inner');
+    const mapImage = document.getElementById('map-image');
 
     // Center coordinates (X, Y) of each building block for zooming
     const BLOCK_CENTERS = {
@@ -602,6 +603,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // 7. Multi-Estate Dynamic Loader (CORS-free file:// compatible)
     // ==========================================================================
+    const ESTATE_MAPS = {
+        "HemmaSapphire": "HemmaSapphire/20260508201120_1_desktop.png",
+        "SierraTerrace": "SierraTerrace/img_layout_plan_tc.png"
+    };
+
     if (estateSelect) {
         estateSelect.addEventListener('change', (e) => {
             const estate = e.target.value;
@@ -618,6 +624,11 @@ document.addEventListener('DOMContentLoaded', () => {
         flatSelect.setAttribute('disabled', 'true');
         flatSelect.innerHTML = `<option value="">請先選擇樓層</option>`;
         clearFlatDetails();
+
+        // Update estate map image
+        if (mapImage && ESTATE_MAPS[estateValue]) {
+            mapImage.src = ESTATE_MAPS[estateValue];
+        }
 
         // Reset inputs and filters
         minSizeInput.value = '';

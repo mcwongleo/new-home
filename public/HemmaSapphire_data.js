@@ -1,4 +1,4 @@
-const allFlatsData = [
+var allFlatsData = [
   {
     "block": "第1A座 Tower 1A",
     "floor": 2,
