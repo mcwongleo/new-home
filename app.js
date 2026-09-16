@@ -178,7 +178,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function updateWebTitle() {
+        if (estateSelect) {
+            const selectedOption = estateSelect.options[estateSelect.selectedIndex];
+            if (selectedOption) {
+                const estateName = selectedOption.text;
+                const headerH1 = document.querySelector('.app-header h1');
+                if (headerH1) {
+                    headerH1.textContent = estateName;
+                }
+                document.title = `${estateName} - 住宅單位售價及面積互動目錄`;
+            }
+        }
+    }
+
     function init() {
+        updateWebTitle();
         if (typeof allFlatsData !== 'undefined') {
             initWithData(allFlatsData);
         } else {
@@ -624,6 +639,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadEstateData(estateValue) {
+        updateWebTitle();
+
         // Clear current elements while loading
         blockSelect.setAttribute('disabled', 'true');
         blockSelect.innerHTML = `<option value="">正在載入項目數據...</option>`;
