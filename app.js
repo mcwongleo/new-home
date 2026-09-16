@@ -605,7 +605,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     const ESTATE_MAPS = {
         "HemmaSapphire": "HemmaSapphire/20260508201120_1_desktop.png",
-        "SierraTerrace": "SierraTerrace/img_layout_plan_tc.png"
+        "SierraTerrace": "SierraTerrace/img_layout_plan_tc.png",
+        "ShingChiCourt": null,
+        "WuiHeiCourt": null,
+        "YuFungCourt": null,
+        "LongFungCourt": null,
+        "KaiYeungCourt": null,
+        "YingFaiCourt": null,
+        "YanNgaCourt": null,
+        "HiuNgaCourt": null
     };
 
     if (estateSelect) {
@@ -625,9 +633,13 @@ document.addEventListener('DOMContentLoaded', () => {
         flatSelect.innerHTML = `<option value="">請先選擇樓層</option>`;
         clearFlatDetails();
 
-        // Update estate map image
-        if (mapImage && ESTATE_MAPS[estateValue]) {
-            mapImage.src = ESTATE_MAPS[estateValue];
+        // Update estate map image or hide map card if null
+        const mapCard = document.querySelector('.map-card');
+        if (ESTATE_MAPS[estateValue]) {
+            if (mapCard) mapCard.classList.remove('hidden');
+            if (mapImage) mapImage.src = ESTATE_MAPS[estateValue];
+        } else {
+            if (mapCard) mapCard.classList.add('hidden');
         }
 
         // Reset inputs and filters
