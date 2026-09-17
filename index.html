@@ -59,6 +59,40 @@
                     </div>
                 </div>
 
+                <!-- Cascading Selectors -->
+                <div class="card selector-card">
+                    <div class="card-header select-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="icon">🏢</span>
+                            <h2>選擇單位 (Select Flat)</h2>
+                        </div>
+                        <span class="match-badge" id="match-badge">0 個符合</span>
+                    </div>
+
+                    <div class="selectors-grid">
+                        <div class="selector-group">
+                            <label for="block-select">大廈座數 (Block / Tower)</label>
+                            <select id="block-select" disabled>
+                                <option value="">正在加載座數...</option>
+                            </select>
+                        </div>
+
+                        <div class="selector-group">
+                            <label for="floor-select">樓層 (Floor)</label>
+                            <select id="floor-select" disabled>
+                                <option value="">請先選擇大廈</option>
+                            </select>
+                        </div>
+
+                        <div class="selector-group">
+                            <label for="flat-select">單位代號 (Flat)</label>
+                            <select id="flat-select" disabled>
+                                <option value="">請先選擇樓層</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Sizing Filters -->
                 <div class="card filter-card" id="size-filter-card">
                     <div class="card-header">
@@ -116,64 +150,10 @@
                         <button id="reset-price-btn" class="secondary-btn">重置</button>
                     </div>
                 </div>
-
-                <!-- Cascading Selectors -->
-                <div class="card selector-card">
-                    <div class="card-header select-header">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="icon">🏢</span>
-                            <h2>選擇單位 (Select Flat)</h2>
-                        </div>
-                        <span class="match-badge" id="match-badge">0 個符合</span>
-                    </div>
-
-                    <div class="selectors-grid">
-                        <div class="selector-group">
-                            <label for="block-select">大廈座數 (Block / Tower)</label>
-                            <select id="block-select" disabled>
-                                <option value="">正在加載座數...</option>
-                            </select>
-                        </div>
-
-                        <div class="selector-group">
-                            <label for="floor-select">樓層 (Floor)</label>
-                            <select id="floor-select" disabled>
-                                <option value="">請先選擇大廈</option>
-                            </select>
-                        </div>
-
-                        <div class="selector-group">
-                            <label for="flat-select">單位代號 (Flat)</label>
-                            <select id="flat-select" disabled>
-                                <option value="">請先選擇樓層</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
             </section>
 
             <!-- Right Panel: Information Details Card -->
             <section class="details-panel">
-                <!-- Interactive Master Layout Map Card -->
-                <div class="card map-card">
-                    <div class="card-header select-header">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="icon">🗺️</span>
-                            <h2>項目總平面圖 (Master Layout Plan)</h2>
-                        </div>
-                        <span class="map-hint" id="map-hint">選擇單位以在平面圖上定位</span>
-                    </div>
-                    <div class="map-container">
-                        <div class="map-wrapper">
-                            <div class="map-inner" id="map-inner">
-                                <img src="HemmaSapphire/20260508201120_1_desktop.png" alt="Hemma Sapphire Master Plan" class="map-image" id="map-image">
-                                <!-- Dynamic active highlight marker -->
-                                <div class="map-marker hidden" id="map-marker"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="card details-card" id="details-card">
                     <!-- Empty State (Shown initially) -->
                     <div class="empty-state" id="empty-state">
@@ -232,11 +212,31 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Interactive Master Layout Map Card -->
+                <div class="card map-card">
+                    <div class="card-header select-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="icon">🗺️</span>
+                            <h2>項目總平面圖 (Master Layout Plan)</h2>
+                        </div>
+                        <span class="map-hint" id="map-hint">選擇單位以在平面圖上定位</span>
+                    </div>
+                    <div class="map-container">
+                        <div class="map-wrapper">
+                            <div class="map-inner" id="map-inner">
+                                <img src="HemmaSapphire/20260508201120_1_desktop.png" alt="Hemma Sapphire Master Plan" class="map-image" id="map-image">
+                                <!-- Dynamic active highlight marker -->
+                                <div class="map-marker hidden" id="map-marker"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </main>
     </div>
 
     <script id="dynamic-estate-script" src="public/HemmaSapphire_data.js"></script>
-    <script src="app.js"></script>
+    <script src="app.js?v=1.0.1"></script>
 </body>
 </html>

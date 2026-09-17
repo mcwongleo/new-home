@@ -659,18 +659,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (mapCard) mapCard.classList.add('hidden');
         }
 
-        // Reset inputs and filters
-        minSizeInput.value = '';
-        maxSizeInput.value = '';
-        sizePresetBtns.forEach(btn => btn.classList.remove('active'));
-        const sizeAllBtn = document.querySelector('#size-filter-card [data-preset="all"]');
-        if (sizeAllBtn) sizeAllBtn.classList.add('active');
-
-        minPriceInput.value = '';
-        maxPriceInput.value = '';
-        pricePresetBtns.forEach(btn => btn.classList.remove('active'));
-        const priceAllBtn = document.querySelector('#price-filter-card [data-price-preset="all"]');
-        if (priceAllBtn) priceAllBtn.classList.add('active');
+        // Intentionally not resetting size and price filters here to preserve user selection across estates.
 
         // Remove old dynamic script tag
         const oldScript = document.getElementById('dynamic-estate-script');
