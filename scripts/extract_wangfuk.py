@@ -40,7 +40,20 @@ with pdfplumber.open(pdf_path) as pdf:
             
         print(f"Parsing page {page_idx + 1} of {len(pdf.pages)}...")
         for row in table:
-            if not row or len(row) < 7:
+            if not row:
+                continue
+            
+            # If the row has 9 columns (which can happen on Page 35 due to an extra column):
+            if len(row) == 9:
+                if row[5] is None:
+                    # Case 1: Empty column at index 5 -> just remove it
+                    row = row[:5] + row[6:]
+                elif isinstance(row[5], str) and row[5].strip().startswith('(') and row[5].strip().endswith(')'):
+                    # Case 2: Parenthesized area at index 5 -> merge it into index 4 and remove index 5
+                    row[4] = f"{row[4]} {row[5]}"
+                    row = row[:5] + row[6:]
+                
+            if len(row) < 7:
                 continue
             
             # Combine all cells to identify header rows to skip
